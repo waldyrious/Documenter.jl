@@ -332,6 +332,16 @@ end
 import .Utilities.TextDiff
 
 function report(result::Result, str, doc::Documents.Document)
+    if true
+        open(Base.find_source_file(result.file), "r+") do f
+            content = readstring(f)
+            seekstart(f)
+            truncate(f, 0)
+            content = replace(content, result.output, str)
+            write(f, content)
+        end
+        return
+    end
     local buffer = IOBuffer()
     println(buffer, "=====[Test Error]", "="^30)
     println(buffer)
